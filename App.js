@@ -1,17 +1,16 @@
 import React from 'react';
-import { ActivityIndicator, Text, TextInput, View  } from 'react-native';
+import { Button, ActivityIndicator, Text, TextInput, Alert, View  } from 'react-native';
 
 export default class FetchExample extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state ={ 
-      isLoading: true,
-      text: ''
-    }
-  }
+  // GetValueFunction = () =>{
+  //   const { text }  = this.state ;
+  //   return text
+  // }
 
-  SendData(text) {
+  SendData = () =>{
+    const { text }  = this.state ;
+    
     fetch('http://192.168.1.29:8080', {
       method: 'POST',
       headers: {
@@ -19,7 +18,7 @@ export default class FetchExample extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Data: text,
+        Data: this.state.text,
       }),
     })
     .then((response) => response.json())
@@ -32,6 +31,14 @@ export default class FetchExample extends React.Component {
     .catch((error) =>{
       console.error(error);
     });
+  }
+
+  constructor(props){
+    super(props);
+    this.state ={ 
+      isLoading: true,
+      text: ''
+    }
   }
 
   componentDidMount(){
@@ -62,10 +69,18 @@ export default class FetchExample extends React.Component {
       <View style={{flex: 1, paddingTop:20}}>
         <TextInput
           style={{height: 40}}
-          placeholder="Type here to translate!"
-          onChangeText={(text)=> this.SendData(text)}
-          value={this.state.text}
+          placeholder="Metin"
+          // onChange={event => setMetin(event.target.value)}
+          onChangeText={(text) => this.setState({text})}
+          // onChangeText={(text)=> this.SendData(text)}
+          // value={this.state.text}
         />
+        <Button
+            // onPress={this.SendData()}
+            onPress={this.SendData}
+            title="Press Me"
+            color="#841584"
+          />
         <Text>{this.state.dataSource}</Text>
       </View>
     );
